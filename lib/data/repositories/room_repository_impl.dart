@@ -1,13 +1,18 @@
 import '../../domain/models/room_item.dart';
 import '../../domain/repositories/room_repository.dart';
+import '../database/app_database.dart';
 
 class RoomRepositoryImpl implements RoomRepository {
-  @override
-  Stream<List<RoomItem>> watchRoomItems() => throw UnimplementedError();
+  final AppDatabase _db;
+
+  RoomRepositoryImpl(this._db);
 
   @override
-  Future<void> saveRoomItem(RoomItem item) => throw UnimplementedError();
+  Stream<List<RoomItem>> watchRoomItems() => _db.watchRoomItems();
 
   @override
-  Future<void> deleteRoomItem(int id) => throw UnimplementedError();
+  Future<void> saveRoomItem(RoomItem item) => _db.saveRoomItem(item);
+
+  @override
+  Future<void> deleteRoomItem(int id) => _db.deleteRoomItem(id);
 }

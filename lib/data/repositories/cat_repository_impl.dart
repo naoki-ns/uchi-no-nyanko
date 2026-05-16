@@ -1,25 +1,30 @@
 import '../../domain/models/cat.dart';
 import '../../domain/models/interaction.dart';
 import '../../domain/repositories/cat_repository.dart';
+import '../database/app_database.dart';
 
 class CatRepositoryImpl implements CatRepository {
-  @override
-  Stream<List<Cat>> watchAllCats() => throw UnimplementedError();
+  final AppDatabase _db;
+
+  CatRepositoryImpl(this._db);
 
   @override
-  Stream<Cat?> watchCat(String catId) => throw UnimplementedError();
+  Stream<List<Cat>> watchAllCats() => _db.watchAllCats();
 
   @override
-  Future<void> saveCat(Cat cat) => throw UnimplementedError();
+  Stream<Cat?> watchCat(String catId) => _db.watchCat(catId);
 
   @override
-  Future<void> deleteCat(String catId) => throw UnimplementedError();
+  Future<void> saveCat(Cat cat) => _db.saveCat(cat);
+
+  @override
+  Future<void> deleteCat(String catId) => _db.deleteCat(catId);
 
   @override
   Future<void> saveInteraction(Interaction interaction) =>
-      throw UnimplementedError();
+      _db.saveInteraction(interaction);
 
   @override
   Stream<List<Interaction>> watchInteractions(String catId) =>
-      throw UnimplementedError();
+      _db.watchInteractions(catId);
 }
