@@ -12,6 +12,19 @@ part 'home_providers.g.dart';
 
 enum TimeOfDaySlot { morning, afternoon, evening, night }
 
+enum Season { spring, summer, autumn, winter }
+
+Season _getSeason(DateTime now) {
+  final m = now.month;
+  if (m >= 3 && m <= 5) return Season.spring;
+  if (m >= 6 && m <= 8) return Season.summer;
+  if (m >= 9 && m <= 11) return Season.autumn;
+  return Season.winter;
+}
+
+@riverpod
+Season currentSeason(CurrentSeasonRef ref) => _getSeason(DateTime.now());
+
 TimeOfDaySlot _getTimeSlot(DateTime now) {
   final hour = now.hour;
   if (hour >= 6 && hour < 12) return TimeOfDaySlot.morning;

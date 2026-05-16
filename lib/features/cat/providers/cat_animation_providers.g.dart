@@ -7,7 +7,7 @@ part of 'cat_animation_providers.dart';
 // **************************************************************************
 
 String _$catAnimationNotifierHash() =>
-    r'ac245adaa82c0226c5e30b4bca2259238d865b6a';
+    r'35e2dadc68b847e582d833c010c0728a0e112a3f';
 
 /// Copied from Dart SDK
 class _SystemHash {

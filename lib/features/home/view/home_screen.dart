@@ -6,6 +6,7 @@ import 'widgets/cat_layer.dart';
 import 'widgets/furniture_layer.dart';
 import 'widgets/home_hud.dart';
 import 'widgets/room_background.dart';
+import 'widgets/season_overlay.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -32,6 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           RoomBackground(),
           FurnitureLayer(),
           CatLayer(),
+          SeasonOverlay(),
           HomeHud(),
         ],
       ),
