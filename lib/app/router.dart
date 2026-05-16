@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../features/cat/view/cat_profile_screen.dart';
+import '../features/catbook/view/catbook_detail_screen.dart';
 import '../features/catbook/view/catbook_screen.dart';
 import '../features/home/view/home_screen.dart';
 import '../features/room/view/room_edit_screen.dart';
@@ -34,6 +35,14 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                 path: '/catbook',
                 builder: (context, state) => const CatbookScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => CatbookDetailScreen(
+                      catId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
