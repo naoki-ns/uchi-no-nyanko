@@ -89,6 +89,17 @@ class AppDatabase extends _$AppDatabase {
     await (delete(roomItems)..where((t) => t.id.equals(id))).go();
   }
 
+  Future<int> addRoomItem(String itemType, double posX, double posY) async {
+    return into(roomItems).insert(
+      RoomItemsCompanion(
+        itemType: Value(itemType),
+        posX: Value(posX),
+        posY: Value(posY),
+        isUnlocked: const Value(true),
+      ),
+    );
+  }
+
   // --- Care action update (read-modify-write in transaction) ---
 
   Future<void> updateCatAfterCare(

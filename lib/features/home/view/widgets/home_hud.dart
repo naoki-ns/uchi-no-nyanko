@@ -18,10 +18,23 @@ class HomeHud extends ConsumerWidget {
             alignment: Alignment.topRight,
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: IconButton(
-                icon: const Icon(Icons.settings, color: Colors.white),
-                style: IconButton.styleFrom(backgroundColor: Colors.black38),
-                onPressed: () => context.push('/settings'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.home_work, color: Colors.white),
+                    style:
+                        IconButton.styleFrom(backgroundColor: Colors.black38),
+                    onPressed: () => context.push('/room/edit'),
+                  ),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    style:
+                        IconButton.styleFrom(backgroundColor: Colors.black38),
+                    onPressed: () => context.push('/settings'),
+                  ),
+                ],
               ),
             ),
           ),
