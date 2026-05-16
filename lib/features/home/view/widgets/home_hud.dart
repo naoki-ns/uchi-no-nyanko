@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class HomeHud extends StatelessWidget {
+import '../../../cat/providers/cat_providers.dart';
+import '../../../cat/view/widgets/care_action_sheet.dart';
+
+class HomeHud extends ConsumerWidget {
   const HomeHud({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cats = ref.watch(catListProvider).valueOrNull ?? [];
     return SafeArea(
       child: Stack(
         children: [
@@ -15,9 +20,7 @@ class HomeHud extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: IconButton(
                 icon: const Icon(Icons.settings, color: Colors.white),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.black38,
-                ),
+                style: IconButton.styleFrom(backgroundColor: Colors.black38),
                 onPressed: () => context.push('/settings'),
               ),
             ),
@@ -28,12 +31,16 @@ class HomeHud extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: FloatingActionButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('猫をタップしてケアしよう！'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                  if (cats.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('猫がいません'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    return;
+                  }
+                  showCareActionSheet(context, cats.first.id);
                 },
                 child: const Icon(Icons.favorite),
               ),

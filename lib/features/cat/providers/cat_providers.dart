@@ -42,12 +42,23 @@ class CatCareNotifier extends _$CatCareNotifier {
         timestamp: DateTime.now(),
       ));
       final (moodDelta, bondDelta) = _deltas(type);
+      final bonus = await _personalityBonus(catId, type);
       await _db.updateCatAfterCare(
         catId,
-        moodDelta: moodDelta,
+        moodDelta: moodDelta + bonus,
         bondDelta: bondDelta,
       );
     });
+  }
+
+  Future<double> _personalityBonus(String catId, String type) async {
+    final cat = await _db.watchCat(catId).first;
+    if (cat == null) return 0.0;
+    return switch (type) {
+      'play' when cat.energy > 0.7 => 0.05,
+      'pet' when cat.affection > 0.7 => 0.05,
+      _ => 0.0,
+    };
   }
 
   (double, int) _deltas(String type) => switch (type) {

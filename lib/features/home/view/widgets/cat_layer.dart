@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../domain/models/cat.dart';
 import '../../../cat/providers/cat_providers.dart';
+import '../../../cat/view/widgets/care_action_sheet.dart';
 import 'cat_placeholder.dart';
 
 const _catPositions = [
@@ -45,7 +45,7 @@ class CatLayer extends ConsumerWidget {
       top: pos.dy * constraints.maxHeight - 40,
       child: CatPlaceholder(
         cat: cat,
-        onTap: () => context.push('/cat/${cat.id}'),
+        onTap: () => showCareActionSheet(context, cat.id),
       ),
     );
   }
