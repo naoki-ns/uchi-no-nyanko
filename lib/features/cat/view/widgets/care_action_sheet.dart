@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../domain/models/cat_animation_state.dart';
+import '../../providers/cat_animation_providers.dart';
 import '../../providers/cat_providers.dart';
 
 Future<void> showCareActionSheet(BuildContext context, String catId) {
@@ -105,17 +107,27 @@ class _CareActionSheet extends ConsumerWidget {
     String message,
   ) async {
     final notifier = ref.read(catCareNotifierProvider.notifier);
+    final animNotifier =
+        ref.read(catAnimationNotifierProvider(catId).notifier);
     switch (type) {
       case 'feed':
         await notifier.feed(catId);
+        animNotifier.trigger(CatAnimationState.eat);
       case 'brush':
         await notifier.brush(catId);
+        animNotifier.trigger(CatAnimationState.groom);
       case 'play':
         await notifier.play(catId);
+        animNotifier.trigger(CatAnimationState.play);
       case 'pet':
         await notifier.pet(catId);
+        animNotifier.trigger(CatAnimationState.happy);
       case 'bed':
         await notifier.makeBed(catId);
+        animNotifier.trigger(
+          CatAnimationState.sleep,
+          duration: const Duration(seconds: 5),
+        );
     }
     if (context.mounted) {
       Navigator.of(context).pop();

@@ -158,7 +158,7 @@ class _CatDetailProviderElement extends AutoDisposeStreamProviderElement<Cat?>
   String get catId => (origin as CatDetailProvider).catId;
 }
 
-String _$catCareNotifierHash() => r'905b4e5dbbd654a550d4a30ff06f78cdae397e08';
+String _$catCareNotifierHash() => r'1af6ba66bb1fc870e8149a4a126e08185054c01b';
 
 /// See also [CatCareNotifier].
 @ProviderFor(CatCareNotifier)

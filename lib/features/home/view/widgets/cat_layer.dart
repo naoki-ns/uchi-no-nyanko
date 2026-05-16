@@ -2,17 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../domain/models/cat.dart';
+import '../../../cat/providers/cat_animation_providers.dart';
 import '../../../cat/providers/cat_providers.dart';
 import '../../../cat/view/widgets/care_action_sheet.dart';
-import 'cat_placeholder.dart';
-
-const _catPositions = [
-  Offset(0.20, 0.55),
-  Offset(0.50, 0.60),
-  Offset(0.75, 0.50),
-  Offset(0.35, 0.40),
-  Offset(0.65, 0.65),
-];
+import '../../../../shared/widgets/animated_cat_widget.dart';
 
 class CatLayer extends ConsumerWidget {
   const CatLayer({super.key});
@@ -25,26 +18,44 @@ class CatLayer extends ConsumerWidget {
       builder: (context, constraints) {
         return Stack(
           children: [
-            for (final (index, cat) in cats.take(5).indexed)
-              _positioned(context, cat, index, constraints),
+            for (final cat in cats.take(5))
+              _AnimatedCatTile(
+                key: ValueKey(cat.id),
+                cat: cat,
+                constraints: constraints,
+              ),
           ],
         );
       },
     );
   }
+}
 
-  Widget _positioned(
-    BuildContext context,
-    Cat cat,
-    int index,
-    BoxConstraints constraints,
-  ) {
-    final pos = _catPositions[index % _catPositions.length];
-    return Positioned(
-      left: pos.dx * constraints.maxWidth - 30,
-      top: pos.dy * constraints.maxHeight - 40,
-      child: CatPlaceholder(
+class _AnimatedCatTile extends ConsumerWidget {
+  const _AnimatedCatTile({
+    super.key,
+    required this.cat,
+    required this.constraints,
+  });
+
+  final Cat cat;
+  final BoxConstraints constraints;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final animValue = ref.watch(catAnimationNotifierProvider(cat.id));
+    final left = animValue.position.dx * constraints.maxWidth - 30;
+    final top = animValue.position.dy * constraints.maxHeight - 40;
+
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 1500),
+      curve: Curves.easeInOut,
+      left: left,
+      top: top,
+      child: AnimatedCatWidget(
         cat: cat,
+        animState: animValue.state,
+        size: 60,
         onTap: () => showCareActionSheet(context, cat.id),
       ),
     );
