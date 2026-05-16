@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../providers/home_providers.dart';
+import 'widgets/cat_layer.dart';
+import 'widgets/furniture_layer.dart';
+import 'widgets/home_hud.dart';
+import 'widgets/room_background.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(defaultCatInitializerProvider.notifier).ensureDefaultCat();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('うちのにゃんこ')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('ホーム（仮）', style: TextStyle(fontSize: 20)),
-            const SizedBox(height: 24),
-            // --- 動作確認用ボタン（Task05以降で削除） ---
-            ElevatedButton(
-              onPressed: () => context.push('/cat/test-cat-001'),
-              child: const Text('/cat/:id（モーダル確認）'),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () => context.push('/room/edit'),
-              child: const Text('/room/edit（Push確認）'),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () => context.push('/settings'),
-              child: const Text('/settings（Push確認）'),
-            ),
-          ],
-        ),
+    return const Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          RoomBackground(),
+          FurnitureLayer(),
+          CatLayer(),
+          HomeHud(),
+        ],
       ),
     );
   }
