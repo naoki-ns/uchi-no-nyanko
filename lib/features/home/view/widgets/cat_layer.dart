@@ -18,7 +18,7 @@ class CatLayer extends ConsumerWidget {
       builder: (context, constraints) {
         return Stack(
           children: [
-            for (final cat in cats.take(5))
+            for (final cat in cats)
               _AnimatedCatTile(
                 key: ValueKey(cat.id),
                 cat: cat,
@@ -55,7 +55,7 @@ class _AnimatedCatTile extends ConsumerWidget {
       child: AnimatedCatWidget(
         cat: cat,
         animState: animValue.state,
-        size: 60,
+        size: cat.isKitten ? 40.0 : 60.0,
         onTap: () => showCareActionSheet(context, cat.id),
       ),
     );

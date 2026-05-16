@@ -28,4 +28,9 @@ class Cat {
     required this.birthDate,
     this.parentIds,
   });
+
+  bool get isKitten =>
+      parentIds != null &&
+      parentIds!.isNotEmpty &&
+      DateTime.now().difference(birthDate).inDays < 7;
 }

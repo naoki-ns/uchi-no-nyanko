@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../cat/providers/cat_providers.dart';
 import '../../../cat/view/widgets/care_action_sheet.dart';
+import 'breeding_banner.dart';
 
 class HomeHud extends ConsumerWidget {
   const HomeHud({super.key});
@@ -14,6 +15,7 @@ class HomeHud extends ConsumerWidget {
     return SafeArea(
       child: Stack(
         children: [
+          const BreedingBanner(),
           Align(
             alignment: Alignment.topRight,
             child: Padding(
