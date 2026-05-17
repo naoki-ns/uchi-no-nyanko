@@ -17,6 +17,9 @@ dependencies:
   rive: ^0.13.16
   path_provider: ^2.1.4
   path: ^1.9.1
+  just_audio: ^0.9.40
+  audioplayers: ^6.1.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

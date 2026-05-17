@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../domain/models/cat_animation_state.dart';
+import '../../../../shared/providers/sound_providers.dart';
 import '../../providers/cat_animation_providers.dart';
 import '../../providers/cat_providers.dart';
 
@@ -109,25 +110,31 @@ class _CareActionSheet extends ConsumerWidget {
     final notifier = ref.read(catCareNotifierProvider.notifier);
     final animNotifier =
         ref.read(catAnimationNotifierProvider(catId).notifier);
+    final se = ref.read(sePlayerProvider.notifier);
     switch (type) {
       case 'feed':
         await notifier.feed(catId);
         animNotifier.trigger(CatAnimationState.eat);
+        se.play('feed');
       case 'brush':
         await notifier.brush(catId);
         animNotifier.trigger(CatAnimationState.groom);
+        se.play('brush');
       case 'play':
         await notifier.play(catId);
         animNotifier.trigger(CatAnimationState.play);
+        se.play('play');
       case 'pet':
         await notifier.pet(catId);
         animNotifier.trigger(CatAnimationState.happy);
+        se.play('pet');
       case 'bed':
         await notifier.makeBed(catId);
         animNotifier.trigger(
           CatAnimationState.sleep,
           duration: const Duration(seconds: 5),
         );
+        se.play('bed');
     }
     if (context.mounted) {
       Navigator.of(context).pop();

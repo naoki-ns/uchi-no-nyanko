@@ -6,7 +6,7 @@ part of 'breeding_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$breedingNotifierHash() => r'4f1a410bea2994e399de566daa949bfb60f0fe89';
+String _$breedingNotifierHash() => r'41b1867ec363f3f86084eeab1d4e5b33c4e9bb86';
 
 /// See also [BreedingNotifier].
 @ProviderFor(BreedingNotifier)
