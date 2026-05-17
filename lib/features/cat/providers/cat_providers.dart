@@ -4,6 +4,7 @@ import '../../../data/database/app_database.dart';
 import '../../../data/providers/app_database_provider.dart';
 import '../../../domain/models/cat.dart';
 import '../../../domain/models/interaction.dart';
+import '../../shop/providers/shop_providers.dart';
 
 part 'cat_providers.g.dart';
 
@@ -48,6 +49,7 @@ class CatCareNotifier extends _$CatCareNotifier {
         moodDelta: moodDelta + bonus,
         bondDelta: bondDelta,
       );
+      await ref.read(playerStatsNotifierProvider.notifier).addCoins(2);
     });
   }
 

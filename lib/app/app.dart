@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/cat/providers/mood_decay_provider.dart';
+import '../features/shop/providers/shop_providers.dart';
 import '../shared/providers/sound_providers.dart';
 import '../shared/theme/app_theme.dart';
 import 'router.dart';
@@ -21,6 +22,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(moodDecayInitializerProvider.notifier).applyAllDecay();
       ref.read(bgmControllerProvider.notifier);
+      ref.read(playerStatsNotifierProvider.notifier).checkAndGrantDailyLogin();
     });
   }
 

@@ -11,16 +11,48 @@ import '../../domain/models/interaction.dart' as domain;
 import '../../domain/models/room_item.dart' as domain;
 import 'tables/cats_table.dart';
 import 'tables/interactions_table.dart';
+import 'tables/player_stats_table.dart';
 import 'tables/room_items_table.dart';
+import 'tables/unlocked_furniture_table.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Cats, Interactions, RoomItems])
+const _defaultUnlockedFurniture = ['bed', 'scratcher', 'toy', 'foodBowl'];
+
+@DriftDatabase(
+  tables: [Cats, Interactions, RoomItems, PlayerStats, UnlockedFurniture],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) async {
+      await m.createAll();
+      await _insertDefaults();
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(playerStats);
+        await m.createTable(unlockedFurniture);
+        await _insertDefaults();
+      }
+    },
+  );
+
+  Future<void> _insertDefaults() async {
+    await into(playerStats).insertOnConflictUpdate(
+      PlayerStatsCompanion(id: const Value(1), coins: const Value(0)),
+    );
+    for (final type in _defaultUnlockedFurniture) {
+      await into(unlockedFurniture).insertOnConflictUpdate(
+        UnlockedFurnitureCompanion(typeName: Value(type)),
+      );
+    }
+  }
 
   // --- Cat queries ---
 
@@ -118,6 +150,55 @@ class AppDatabase extends _$AppDatabase {
         ),
       );
     });
+  }
+
+  // --- PlayerStats queries ---
+
+  Future<PlayerStatsRow?> getPlayerStats() {
+    return (select(playerStats)..where((t) => t.id.equals(1)))
+        .getSingleOrNull();
+  }
+
+  Stream<PlayerStatsRow?> watchPlayerStats() {
+    return (select(playerStats)..where((t) => t.id.equals(1)))
+        .watchSingleOrNull();
+  }
+
+  Future<void> updateCoins(int coins) async {
+    await (update(playerStats)..where((t) => t.id.equals(1))).write(
+      PlayerStatsCompanion(coins: Value(coins)),
+    );
+  }
+
+  Future<void> setLastLoginDate(String date) async {
+    await (update(playerStats)..where((t) => t.id.equals(1))).write(
+      PlayerStatsCompanion(lastLoginDate: Value(date)),
+    );
+  }
+
+  Future<void> setWallpaper(String wallpaperId) async {
+    await (update(playerStats)..where((t) => t.id.equals(1))).write(
+      PlayerStatsCompanion(wallpaperId: Value(wallpaperId)),
+    );
+  }
+
+  // --- UnlockedFurniture queries ---
+
+  Future<List<String>> getUnlockedFurnitureTypes() async {
+    final rows = await select(unlockedFurniture).get();
+    return rows.map((r) => r.typeName).toList();
+  }
+
+  Stream<List<String>> watchUnlockedFurnitureTypes() {
+    return select(unlockedFurniture)
+        .watch()
+        .map((rows) => rows.map((r) => r.typeName).toList());
+  }
+
+  Future<void> unlockFurniture(String typeName) async {
+    await into(unlockedFurniture).insertOnConflictUpdate(
+      UnlockedFurnitureCompanion(typeName: Value(typeName)),
+    );
   }
 
   // --- Mapping helpers ---

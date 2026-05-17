@@ -1388,12 +1388,490 @@ class RoomItemsCompanion extends UpdateCompanion<RoomItemRow> {
   }
 }
 
+class $PlayerStatsTable extends PlayerStats
+    with TableInfo<$PlayerStatsTable, PlayerStatsRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PlayerStatsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _coinsMeta = const VerificationMeta('coins');
+  @override
+  late final GeneratedColumn<int> coins = GeneratedColumn<int>(
+    'coins',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _lastLoginDateMeta = const VerificationMeta(
+    'lastLoginDate',
+  );
+  @override
+  late final GeneratedColumn<String> lastLoginDate = GeneratedColumn<String>(
+    'last_login_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _wallpaperIdMeta = const VerificationMeta(
+    'wallpaperId',
+  );
+  @override
+  late final GeneratedColumn<String> wallpaperId = GeneratedColumn<String>(
+    'wallpaper_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, coins, lastLoginDate, wallpaperId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'player_stats';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PlayerStatsRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('coins')) {
+      context.handle(
+        _coinsMeta,
+        coins.isAcceptableOrUnknown(data['coins']!, _coinsMeta),
+      );
+    }
+    if (data.containsKey('last_login_date')) {
+      context.handle(
+        _lastLoginDateMeta,
+        lastLoginDate.isAcceptableOrUnknown(
+          data['last_login_date']!,
+          _lastLoginDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('wallpaper_id')) {
+      context.handle(
+        _wallpaperIdMeta,
+        wallpaperId.isAcceptableOrUnknown(
+          data['wallpaper_id']!,
+          _wallpaperIdMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PlayerStatsRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PlayerStatsRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      coins: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}coins'],
+      )!,
+      lastLoginDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_login_date'],
+      ),
+      wallpaperId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}wallpaper_id'],
+      ),
+    );
+  }
+
+  @override
+  $PlayerStatsTable createAlias(String alias) {
+    return $PlayerStatsTable(attachedDatabase, alias);
+  }
+}
+
+class PlayerStatsRow extends DataClass implements Insertable<PlayerStatsRow> {
+  final int id;
+  final int coins;
+  final String? lastLoginDate;
+  final String? wallpaperId;
+  const PlayerStatsRow({
+    required this.id,
+    required this.coins,
+    this.lastLoginDate,
+    this.wallpaperId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['coins'] = Variable<int>(coins);
+    if (!nullToAbsent || lastLoginDate != null) {
+      map['last_login_date'] = Variable<String>(lastLoginDate);
+    }
+    if (!nullToAbsent || wallpaperId != null) {
+      map['wallpaper_id'] = Variable<String>(wallpaperId);
+    }
+    return map;
+  }
+
+  PlayerStatsCompanion toCompanion(bool nullToAbsent) {
+    return PlayerStatsCompanion(
+      id: Value(id),
+      coins: Value(coins),
+      lastLoginDate: lastLoginDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastLoginDate),
+      wallpaperId: wallpaperId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(wallpaperId),
+    );
+  }
+
+  factory PlayerStatsRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PlayerStatsRow(
+      id: serializer.fromJson<int>(json['id']),
+      coins: serializer.fromJson<int>(json['coins']),
+      lastLoginDate: serializer.fromJson<String?>(json['lastLoginDate']),
+      wallpaperId: serializer.fromJson<String?>(json['wallpaperId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'coins': serializer.toJson<int>(coins),
+      'lastLoginDate': serializer.toJson<String?>(lastLoginDate),
+      'wallpaperId': serializer.toJson<String?>(wallpaperId),
+    };
+  }
+
+  PlayerStatsRow copyWith({
+    int? id,
+    int? coins,
+    Value<String?> lastLoginDate = const Value.absent(),
+    Value<String?> wallpaperId = const Value.absent(),
+  }) => PlayerStatsRow(
+    id: id ?? this.id,
+    coins: coins ?? this.coins,
+    lastLoginDate: lastLoginDate.present
+        ? lastLoginDate.value
+        : this.lastLoginDate,
+    wallpaperId: wallpaperId.present ? wallpaperId.value : this.wallpaperId,
+  );
+  PlayerStatsRow copyWithCompanion(PlayerStatsCompanion data) {
+    return PlayerStatsRow(
+      id: data.id.present ? data.id.value : this.id,
+      coins: data.coins.present ? data.coins.value : this.coins,
+      lastLoginDate: data.lastLoginDate.present
+          ? data.lastLoginDate.value
+          : this.lastLoginDate,
+      wallpaperId: data.wallpaperId.present
+          ? data.wallpaperId.value
+          : this.wallpaperId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlayerStatsRow(')
+          ..write('id: $id, ')
+          ..write('coins: $coins, ')
+          ..write('lastLoginDate: $lastLoginDate, ')
+          ..write('wallpaperId: $wallpaperId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, coins, lastLoginDate, wallpaperId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PlayerStatsRow &&
+          other.id == this.id &&
+          other.coins == this.coins &&
+          other.lastLoginDate == this.lastLoginDate &&
+          other.wallpaperId == this.wallpaperId);
+}
+
+class PlayerStatsCompanion extends UpdateCompanion<PlayerStatsRow> {
+  final Value<int> id;
+  final Value<int> coins;
+  final Value<String?> lastLoginDate;
+  final Value<String?> wallpaperId;
+  const PlayerStatsCompanion({
+    this.id = const Value.absent(),
+    this.coins = const Value.absent(),
+    this.lastLoginDate = const Value.absent(),
+    this.wallpaperId = const Value.absent(),
+  });
+  PlayerStatsCompanion.insert({
+    this.id = const Value.absent(),
+    this.coins = const Value.absent(),
+    this.lastLoginDate = const Value.absent(),
+    this.wallpaperId = const Value.absent(),
+  });
+  static Insertable<PlayerStatsRow> custom({
+    Expression<int>? id,
+    Expression<int>? coins,
+    Expression<String>? lastLoginDate,
+    Expression<String>? wallpaperId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (coins != null) 'coins': coins,
+      if (lastLoginDate != null) 'last_login_date': lastLoginDate,
+      if (wallpaperId != null) 'wallpaper_id': wallpaperId,
+    });
+  }
+
+  PlayerStatsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? coins,
+    Value<String?>? lastLoginDate,
+    Value<String?>? wallpaperId,
+  }) {
+    return PlayerStatsCompanion(
+      id: id ?? this.id,
+      coins: coins ?? this.coins,
+      lastLoginDate: lastLoginDate ?? this.lastLoginDate,
+      wallpaperId: wallpaperId ?? this.wallpaperId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (coins.present) {
+      map['coins'] = Variable<int>(coins.value);
+    }
+    if (lastLoginDate.present) {
+      map['last_login_date'] = Variable<String>(lastLoginDate.value);
+    }
+    if (wallpaperId.present) {
+      map['wallpaper_id'] = Variable<String>(wallpaperId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlayerStatsCompanion(')
+          ..write('id: $id, ')
+          ..write('coins: $coins, ')
+          ..write('lastLoginDate: $lastLoginDate, ')
+          ..write('wallpaperId: $wallpaperId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UnlockedFurnitureTable extends UnlockedFurniture
+    with TableInfo<$UnlockedFurnitureTable, UnlockedFurnitureRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UnlockedFurnitureTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _typeNameMeta = const VerificationMeta(
+    'typeName',
+  );
+  @override
+  late final GeneratedColumn<String> typeName = GeneratedColumn<String>(
+    'type_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [typeName];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'unlocked_furniture';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UnlockedFurnitureRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('type_name')) {
+      context.handle(
+        _typeNameMeta,
+        typeName.isAcceptableOrUnknown(data['type_name']!, _typeNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeNameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {typeName};
+  @override
+  UnlockedFurnitureRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UnlockedFurnitureRow(
+      typeName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type_name'],
+      )!,
+    );
+  }
+
+  @override
+  $UnlockedFurnitureTable createAlias(String alias) {
+    return $UnlockedFurnitureTable(attachedDatabase, alias);
+  }
+}
+
+class UnlockedFurnitureRow extends DataClass
+    implements Insertable<UnlockedFurnitureRow> {
+  final String typeName;
+  const UnlockedFurnitureRow({required this.typeName});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['type_name'] = Variable<String>(typeName);
+    return map;
+  }
+
+  UnlockedFurnitureCompanion toCompanion(bool nullToAbsent) {
+    return UnlockedFurnitureCompanion(typeName: Value(typeName));
+  }
+
+  factory UnlockedFurnitureRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UnlockedFurnitureRow(
+      typeName: serializer.fromJson<String>(json['typeName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{'typeName': serializer.toJson<String>(typeName)};
+  }
+
+  UnlockedFurnitureRow copyWith({String? typeName}) =>
+      UnlockedFurnitureRow(typeName: typeName ?? this.typeName);
+  UnlockedFurnitureRow copyWithCompanion(UnlockedFurnitureCompanion data) {
+    return UnlockedFurnitureRow(
+      typeName: data.typeName.present ? data.typeName.value : this.typeName,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UnlockedFurnitureRow(')
+          ..write('typeName: $typeName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => typeName.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UnlockedFurnitureRow && other.typeName == this.typeName);
+}
+
+class UnlockedFurnitureCompanion extends UpdateCompanion<UnlockedFurnitureRow> {
+  final Value<String> typeName;
+  final Value<int> rowid;
+  const UnlockedFurnitureCompanion({
+    this.typeName = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  UnlockedFurnitureCompanion.insert({
+    required String typeName,
+    this.rowid = const Value.absent(),
+  }) : typeName = Value(typeName);
+  static Insertable<UnlockedFurnitureRow> custom({
+    Expression<String>? typeName,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (typeName != null) 'type_name': typeName,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  UnlockedFurnitureCompanion copyWith({
+    Value<String>? typeName,
+    Value<int>? rowid,
+  }) {
+    return UnlockedFurnitureCompanion(
+      typeName: typeName ?? this.typeName,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (typeName.present) {
+      map['type_name'] = Variable<String>(typeName.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UnlockedFurnitureCompanion(')
+          ..write('typeName: $typeName, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CatsTable cats = $CatsTable(this);
   late final $InteractionsTable interactions = $InteractionsTable(this);
   late final $RoomItemsTable roomItems = $RoomItemsTable(this);
+  late final $PlayerStatsTable playerStats = $PlayerStatsTable(this);
+  late final $UnlockedFurnitureTable unlockedFurniture =
+      $UnlockedFurnitureTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1402,6 +1880,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     cats,
     interactions,
     roomItems,
+    playerStats,
+    unlockedFurniture,
   ];
 }
 
@@ -2341,6 +2821,320 @@ typedef $$RoomItemsTableProcessedTableManager =
       RoomItemRow,
       PrefetchHooks Function()
     >;
+typedef $$PlayerStatsTableCreateCompanionBuilder =
+    PlayerStatsCompanion Function({
+      Value<int> id,
+      Value<int> coins,
+      Value<String?> lastLoginDate,
+      Value<String?> wallpaperId,
+    });
+typedef $$PlayerStatsTableUpdateCompanionBuilder =
+    PlayerStatsCompanion Function({
+      Value<int> id,
+      Value<int> coins,
+      Value<String?> lastLoginDate,
+      Value<String?> wallpaperId,
+    });
+
+class $$PlayerStatsTableFilterComposer
+    extends Composer<_$AppDatabase, $PlayerStatsTable> {
+  $$PlayerStatsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get coins => $composableBuilder(
+    column: $table.coins,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastLoginDate => $composableBuilder(
+    column: $table.lastLoginDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get wallpaperId => $composableBuilder(
+    column: $table.wallpaperId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PlayerStatsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PlayerStatsTable> {
+  $$PlayerStatsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get coins => $composableBuilder(
+    column: $table.coins,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastLoginDate => $composableBuilder(
+    column: $table.lastLoginDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get wallpaperId => $composableBuilder(
+    column: $table.wallpaperId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PlayerStatsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PlayerStatsTable> {
+  $$PlayerStatsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get coins =>
+      $composableBuilder(column: $table.coins, builder: (column) => column);
+
+  GeneratedColumn<String> get lastLoginDate => $composableBuilder(
+    column: $table.lastLoginDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get wallpaperId => $composableBuilder(
+    column: $table.wallpaperId,
+    builder: (column) => column,
+  );
+}
+
+class $$PlayerStatsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PlayerStatsTable,
+          PlayerStatsRow,
+          $$PlayerStatsTableFilterComposer,
+          $$PlayerStatsTableOrderingComposer,
+          $$PlayerStatsTableAnnotationComposer,
+          $$PlayerStatsTableCreateCompanionBuilder,
+          $$PlayerStatsTableUpdateCompanionBuilder,
+          (
+            PlayerStatsRow,
+            BaseReferences<_$AppDatabase, $PlayerStatsTable, PlayerStatsRow>,
+          ),
+          PlayerStatsRow,
+          PrefetchHooks Function()
+        > {
+  $$PlayerStatsTableTableManager(_$AppDatabase db, $PlayerStatsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PlayerStatsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlayerStatsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlayerStatsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> coins = const Value.absent(),
+                Value<String?> lastLoginDate = const Value.absent(),
+                Value<String?> wallpaperId = const Value.absent(),
+              }) => PlayerStatsCompanion(
+                id: id,
+                coins: coins,
+                lastLoginDate: lastLoginDate,
+                wallpaperId: wallpaperId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> coins = const Value.absent(),
+                Value<String?> lastLoginDate = const Value.absent(),
+                Value<String?> wallpaperId = const Value.absent(),
+              }) => PlayerStatsCompanion.insert(
+                id: id,
+                coins: coins,
+                lastLoginDate: lastLoginDate,
+                wallpaperId: wallpaperId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PlayerStatsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PlayerStatsTable,
+      PlayerStatsRow,
+      $$PlayerStatsTableFilterComposer,
+      $$PlayerStatsTableOrderingComposer,
+      $$PlayerStatsTableAnnotationComposer,
+      $$PlayerStatsTableCreateCompanionBuilder,
+      $$PlayerStatsTableUpdateCompanionBuilder,
+      (
+        PlayerStatsRow,
+        BaseReferences<_$AppDatabase, $PlayerStatsTable, PlayerStatsRow>,
+      ),
+      PlayerStatsRow,
+      PrefetchHooks Function()
+    >;
+typedef $$UnlockedFurnitureTableCreateCompanionBuilder =
+    UnlockedFurnitureCompanion Function({
+      required String typeName,
+      Value<int> rowid,
+    });
+typedef $$UnlockedFurnitureTableUpdateCompanionBuilder =
+    UnlockedFurnitureCompanion Function({
+      Value<String> typeName,
+      Value<int> rowid,
+    });
+
+class $$UnlockedFurnitureTableFilterComposer
+    extends Composer<_$AppDatabase, $UnlockedFurnitureTable> {
+  $$UnlockedFurnitureTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get typeName => $composableBuilder(
+    column: $table.typeName,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UnlockedFurnitureTableOrderingComposer
+    extends Composer<_$AppDatabase, $UnlockedFurnitureTable> {
+  $$UnlockedFurnitureTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get typeName => $composableBuilder(
+    column: $table.typeName,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UnlockedFurnitureTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UnlockedFurnitureTable> {
+  $$UnlockedFurnitureTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get typeName =>
+      $composableBuilder(column: $table.typeName, builder: (column) => column);
+}
+
+class $$UnlockedFurnitureTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UnlockedFurnitureTable,
+          UnlockedFurnitureRow,
+          $$UnlockedFurnitureTableFilterComposer,
+          $$UnlockedFurnitureTableOrderingComposer,
+          $$UnlockedFurnitureTableAnnotationComposer,
+          $$UnlockedFurnitureTableCreateCompanionBuilder,
+          $$UnlockedFurnitureTableUpdateCompanionBuilder,
+          (
+            UnlockedFurnitureRow,
+            BaseReferences<
+              _$AppDatabase,
+              $UnlockedFurnitureTable,
+              UnlockedFurnitureRow
+            >,
+          ),
+          UnlockedFurnitureRow,
+          PrefetchHooks Function()
+        > {
+  $$UnlockedFurnitureTableTableManager(
+    _$AppDatabase db,
+    $UnlockedFurnitureTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UnlockedFurnitureTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UnlockedFurnitureTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UnlockedFurnitureTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> typeName = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) =>
+                  UnlockedFurnitureCompanion(typeName: typeName, rowid: rowid),
+          createCompanionCallback:
+              ({
+                required String typeName,
+                Value<int> rowid = const Value.absent(),
+              }) => UnlockedFurnitureCompanion.insert(
+                typeName: typeName,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UnlockedFurnitureTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UnlockedFurnitureTable,
+      UnlockedFurnitureRow,
+      $$UnlockedFurnitureTableFilterComposer,
+      $$UnlockedFurnitureTableOrderingComposer,
+      $$UnlockedFurnitureTableAnnotationComposer,
+      $$UnlockedFurnitureTableCreateCompanionBuilder,
+      $$UnlockedFurnitureTableUpdateCompanionBuilder,
+      (
+        UnlockedFurnitureRow,
+        BaseReferences<
+          _$AppDatabase,
+          $UnlockedFurnitureTable,
+          UnlockedFurnitureRow
+        >,
+      ),
+      UnlockedFurnitureRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2350,4 +3144,8 @@ class $AppDatabaseManager {
       $$InteractionsTableTableManager(_db, _db.interactions);
   $$RoomItemsTableTableManager get roomItems =>
       $$RoomItemsTableTableManager(_db, _db.roomItems);
+  $$PlayerStatsTableTableManager get playerStats =>
+      $$PlayerStatsTableTableManager(_db, _db.playerStats);
+  $$UnlockedFurnitureTableTableManager get unlockedFurniture =>
+      $$UnlockedFurnitureTableTableManager(_db, _db.unlockedFurniture);
 }
